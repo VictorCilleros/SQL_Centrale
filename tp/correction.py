@@ -20,7 +20,7 @@ def somme_carres_ter(n):
     res = 0
     for k in (i*i for i in range(n)):
         res+=k
-    return k
+    return res
 
 def somme_carres_quad(n):
     return sum(i*i for i in range(n))
@@ -56,7 +56,17 @@ def projection(table, champs):
     Renvoie une exception si un attribut de ~champs~ n'est pas un attribut des
     tuples de ~table~.
     """
-    yield {}
+    for i in table:
+        res = {} 
+        for ch in champs:
+            try:
+                assert (ch in i)
+            except AssertionError as msg:
+                print(msg)
+                raise KeyError
+            res[ch]=i[ch]
+        yield res       # retourne déja un générateur.
+
 
 def exemple_projection():
     """Exemple d'utilisation de la projection."""
@@ -68,7 +78,10 @@ def exemple_projection():
 def transformation(table, f):
     """Renvoie un flux obtenu en appliquant ~f~ à chacun des tuples composant
 ~table~."""
-    yield {}
+    for i in table:
+        res={}
+        res=f(i)
+        yield res
 
 def exemple_transformation():
     schema = {'a': (1, 10), 'b': (40, 100), 'c': (20,30)}
