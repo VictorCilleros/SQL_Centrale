@@ -167,7 +167,10 @@ def appariement(t1, t2):
     À une clé qui apparaît dans les deux tuples, le résultat associe la valeur
     que lui associe ~t2~.
     """
-    return {}
+    res=t1
+    for key,val in t2.items():
+        res[key]=val
+    return res
 
 def produit_cartesien(table1, table2):
     """Construit le flux de tuples obtenus en appariant tous les tuples de
@@ -177,7 +180,17 @@ def produit_cartesien(table1, table2):
     - ~table1~ est la table utilisée dans le boucle extérieure,
     - ~table2~ est la table utilisée dans la boucle intérieure.
     """
-    yield {}
+    for tuple1 in table1:
+        for tuple2 in table2:
+            res=appariement(tuple1,tuple2)
+            yield res
+
+""" tb1 = table({'a': (1,4)}, nb=1)
+tb2 = table({'b': (2,4)}, nb=4)
+produit_cartesien(tb1,tb2)
+for tp in produit_cartesien(tb1,tb2):
+    print(tp)  """
+
 
 def produit_cartesien_fichier(fichier1, fichier2):
     """Construit le flux de tuples obtenus en appariant tous les tuples contenus
@@ -189,7 +202,11 @@ def produit_cartesien_fichier(fichier1, fichier2):
     - la table contenue dans ~fichier2~ est la table utilisée dans la boucle intérieure.
 
     """
-    yield {}
+    table1=lire_sur_disque(fichier1)
+    for tuple1 in table1:
+        table2=lire_sur_disque(fichier2)
+        for tuple2 in table2:
+            yield appariement(tuple1,tuple2)
 
 def jointure_theta(fichier1, fichier2, pred):
     """Renvoie le flux des appariements de tuples contenus dans les tables des
