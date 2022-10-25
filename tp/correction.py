@@ -259,7 +259,10 @@ def jointure_index(table1, col1, fichier2, index):
 
     ~index~ est un index de l'attribut ~col2~ dans ~fichier2~.
     """
-    yield {}
+    for tp1 in table1:
+        if tp1[col1] in index:
+            for tp2 in trouve_sur_disque(fichier2,index[tp1[col1]]):
+                yield appariement(tp1,tp2)
 
 def jointure_double_index(fichier1, index1, fichier2, index2):
     """Renvoie le flux de tuples obtenue par la jointure des tables contenues dans
