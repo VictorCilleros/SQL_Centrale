@@ -229,8 +229,7 @@ def jointure_naturelle(fichier1, fichier2):
     ~fichier1~et ~fichier2~ qui associent les mêmes valeurs à leurs attributs
     communs.
     """
-    table=produit_cartesien_fichier(fichier1,fichier2)
-    for tpl in lire_sur_disque(fichier1):
+    for tp1 in lire_sur_disque(fichier1):
         for tp2 in lire_sur_disque(fichier2):
             if all([tp1[k] == tp2[k] for k in tp1 if k in tp2]):
                 yield appariement(tp1,tp2)
@@ -245,9 +244,12 @@ def jointure_naturelle_mem(fichier1, fichier2):
     Il s'agit des appariements des tuples provenant des tables contenues dans
     ~fichier1~et ~fichier2~ qui associent les mêmes valeurs à leurs attributs
     communs.
-
     """
-    yield {}
+    table2=list(lire_sur_disque(fichier2))
+    for tp1 in lire_sur_disque(fichier1):
+        for tp2 in table2:
+            if all([tp1[k] == tp2[k] for k in tp1 if k in tp2]):
+                yield appariement(tp1,tp2)
 
 def jointure_index(table1, col1, fichier2, index):
     """Renvoie le flux des tuples de la jointure de la ~table1~ et de la table
