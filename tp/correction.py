@@ -150,10 +150,13 @@ def selection_index(fichier, idx, valeurs) :
     Attention : si un élément de ~valeurs~ n'est pas référencé dans ~idx~, on
     souhaite qu'il n'y ait pas d'erreur.
     """
-    
-
-
-    yield {}
+    for v in valeurs:
+        try:
+            b= trouve_sur_disque(fichier,idx[v])
+            for res in b:
+                yield res
+        except:
+            continue
 
 def appariement(t1, t2):
     """Renvoie un tuple ayant pour clé les clés de ~t1~ et de ~t2~.
