@@ -19,10 +19,7 @@ class test_selection(unittest.TestCase):
                {"a": 5, "b": 2, "c": 3},
                {"a": 1, "b": 8, "c": 4},
                {"a": 5, "b": 2, "c": 3}]
-        self.assertEqual(list(selection(tbl, lambda tp: (tp['a'] + tp['b'] +
-                                                         tp['c']) % 2 == 0)),
-                         [tp for tp in tbl if (tp['a'] + tp['b'] +
-                                               tp['c']) % 2 == 0],
+        self.assertEqual(list(selection(tbl, lambda tp: (tp['a'] + tp['b'] + tp['c']) % 2 == 0)),[tp for tp in tbl if (tp['a'] + tp['b'] +tp['c']) % 2 == 0],
                          "La sémantique de la sélection n'est pas respectée.")
 
 if __name__ == '__main__':

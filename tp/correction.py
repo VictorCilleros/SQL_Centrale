@@ -167,9 +167,11 @@ def appariement(t1, t2):
     À une clé qui apparaît dans les deux tuples, le résultat associe la valeur
     que lui associe ~t2~.
     """
-    res=t1
-    for key,val in t2.items():
-        res[key]=val
+    res={}
+    for ch in t1:
+        res[ch]=t1[ch]
+    for key in t2:
+        res[key]=t2[key]
     return res
 
 def produit_cartesien(table1, table2):
@@ -206,13 +208,18 @@ def produit_cartesien_fichier(fichier1, fichier2):
     for tuple1 in table1:
         table2=lire_sur_disque(fichier2)
         for tuple2 in table2:
+            a=tuple1
+            b=tuple2
             yield appariement(tuple1,tuple2)
 
 def jointure_theta(fichier1, fichier2, pred):
     """Renvoie le flux des appariements de tuples contenus dans les tables des
     fichiers ~fichier1~ et ~fichier2~" qui satisfont la propriété du prédicat
     ~pred~ (fonction des tuples dans les booléens)."""
-    yield {}
+    table=produit_cartesien_fichier(fichier1,fichier2)
+    for tuple in selection(table,pred):
+        yield tuple
+
 
 def jointure_naturelle(fichier1, fichier2):
     """Renvoie le flux des tuples de la jointure naturelle des tables contenues
@@ -222,7 +229,11 @@ def jointure_naturelle(fichier1, fichier2):
     ~fichier1~et ~fichier2~ qui associent les mêmes valeurs à leurs attributs
     communs.
     """
-    yield {}
+    table=produit_cartesien_fichier(fichier1,fichier2)
+    for tpl in lire_sur_disque(fichier1):
+        for tp2 in lire_sur_disque(fichier2):
+            if all([tp1[k] == tp2[k] for k in tp1 if k in tp2]):
+                yield appariement(tp1,tp2)
 
 def jointure_naturelle_mem(fichier1, fichier2):
     """Renvoie le flux des tuples de la jointure naturelle des tables contenues
