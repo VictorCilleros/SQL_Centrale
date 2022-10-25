@@ -83,6 +83,8 @@ def transformation(table, f):
         res=f(i)
         yield res
 
+        # aussi faire return (f(t) for t in table)
+
 def exemple_transformation():
     schema = {'a': (1, 10), 'b': (40, 100), 'c': (20,30)}
     f = lambda tp: {'a': tp['a'], 'm': (tp['b']+tp['c'])//2}
@@ -99,11 +101,24 @@ def projection2(table, champs):
     Renvoie une erreur si un attribut de ~champs~ n'est pas un attribut des
     tuples de ~table~.
     """
-    yield {}
+    def transformation_champs(dico):
+        res={}
+        for ch in champs:
+            try:
+                res[ch]=dico[ch]
+            except:
+                raise KeyError
+        return res
+
+    return transformation(table,transformation_champs)
+
 
 def union(t1, t2):
     """Construit un flux qui énumère les éléments de ~t1~ puis ceux de ~t2~."""
-    yield {}
+    for t in t1:
+        yield t
+    for t in t2:
+        yield t
 
 def exemple_union():
     """Exemple d'utilisation de la fonction union."""
@@ -117,7 +132,9 @@ def exemple_union():
 def selection(table, pred):
     """Construit le flux des éléments de ~table~ qui satisfont le prédicat
        ~pred~ (fonction des tuples dans les booléens)."""
-    yield {}
+    for t in table:
+        if pred(t):
+            yield t
 
 def exemple_selection():
     for un_tuple in selection(table({'a': (30, 100), 'b': (10, 50)}, nb=10),
@@ -133,6 +150,9 @@ def selection_index(fichier, idx, valeurs) :
     Attention : si un élément de ~valeurs~ n'est pas référencé dans ~idx~, on
     souhaite qu'il n'y ait pas d'erreur.
     """
+    
+
+
     yield {}
 
 def appariement(t1, t2):
